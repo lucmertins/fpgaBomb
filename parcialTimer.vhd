@@ -7,15 +7,15 @@ use IEEE.std_logic_unsigned.all;
 -- o result informa o valor em binario
 -- dec0 e dec1 informam os digitos decimai, preparando para o display
 
- entity ajusteTempo is
+ entity parcialTimer is
 	 port (
 		 clk,rst,enabled,hora_min: in std_logic;
 		 result: out std_logic_vector(7 downto 0);
 		 dec0,dec1: out std_logic_vector(3 downto 0)
 		 );
- end ajusteTempo; 
+ end parcialTimer; 
  
- architecture arq of ajusteTempo is 
+ architecture arq of parcialTimer is 
 	
  begin	
 	process(clk,rst)
