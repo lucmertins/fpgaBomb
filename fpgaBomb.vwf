@@ -576,9 +576,15 @@ TRANSITION_LIST("btH")
 	NODE
 	{
 		REPEAT = 1;
+<<<<<<< HEAD
 		LEVEL 1 FOR 10.0;
 		LEVEL 0 FOR 390.0;
 		LEVEL 1 FOR 600.0;
+=======
+		LEVEL 1 FOR 40.0;
+		LEVEL 0 FOR 180.0;
+		LEVEL 1 FOR 780.0;
+>>>>>>> origin/master
 	}
 }
 
@@ -587,9 +593,17 @@ TRANSITION_LIST("btM")
 	NODE
 	{
 		REPEAT = 1;
+<<<<<<< HEAD
 		LEVEL 1 FOR 410.0;
 		LEVEL 0 FOR 330.0;
 		LEVEL 1 FOR 260.0;
+=======
+		LEVEL 1 FOR 270.0;
+		LEVEL 0 FOR 210.0;
+		LEVEL 1 FOR 50.0;
+		LEVEL 0 FOR 190.0;
+		LEVEL 1 FOR 280.0;
+>>>>>>> origin/master
 	}
 }
 
@@ -598,9 +612,15 @@ TRANSITION_LIST("btS")
 	NODE
 	{
 		REPEAT = 1;
+<<<<<<< HEAD
 		LEVEL 1 FOR 760.0;
 		LEVEL 0 FOR 220.0;
 		LEVEL 1 FOR 20.0;
+=======
+		LEVEL 1 FOR 530.0;
+		LEVEL 0 FOR 190.0;
+		LEVEL 1 FOR 280.0;
+>>>>>>> origin/master
 	}
 }
 
