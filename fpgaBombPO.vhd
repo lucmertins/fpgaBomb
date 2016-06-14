@@ -38,7 +38,7 @@ component fullTimer is
  begin
 
    freq1s: divisorfrequencia port map(clk => clk, clock_1s => clk1s);
-	configTimer: fullTimer port map(clk=>clk1s,rst=>rstF0,enabled=>enabledF0,opc=>opctimer,
+	configTimer: fullTimer port map(clk=>clk,rst=>rstF0,enabled=>enabledF0,opc=>opctimer,
 					dspH0=>dH0,dspH1=>dH1,dspM0=>dM0,dspM1=>dM1,dspS0=>dS0,dspS1=>dS1);
 	
 	process (clk,enabledF0)  
@@ -62,9 +62,9 @@ component fullTimer is
 		end if;  
    end process;
  
-   process (clk)  
+   process (btH,btM,btS)  
 	begin   
-		if (clk'EVENT and clk = '1') then    
+		if (enabledF0 = '1') then    
 			if btH='0' then
 				opctimer<="01";
 			elsif btM='0' then
@@ -74,6 +74,8 @@ component fullTimer is
 			else
 				opctimer<="00";
 			end if;
+		else
+			opctimer<="00";
 		end if;  
    end process;
 
