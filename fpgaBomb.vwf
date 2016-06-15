@@ -1,3 +1,4 @@
+/* Simulator = Quartus II Simulator */
 /*
 WARNING: Do NOT edit the input and output ports in this file in a text
 editor if you plan to continue editing the block that represents it in
@@ -28,8 +29,8 @@ HEADER
 	DATA_DURATION = 1000.0;
 	SIMULATION_TIME = 0.0;
 	GRID_PHASE = 0.0;
-	GRID_PERIOD = 10.0;
-	GRID_DUTY_CYCLE = 50;
+	GRID_PERIOD = 0.0;
+	GRID_DUTY_CYCLE = 0;
 }
 
 SIGNAL("ativar")
@@ -567,7 +568,9 @@ TRANSITION_LIST("ativar")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL 1 FOR 1000.0;
+		LEVEL 1 FOR 960.0;
+		LEVEL 0 FOR 30.0;
+		LEVEL 1 FOR 10.0;
 	}
 }
 
@@ -576,15 +579,9 @@ TRANSITION_LIST("btH")
 	NODE
 	{
 		REPEAT = 1;
-<<<<<<< HEAD
-		LEVEL 1 FOR 10.0;
-		LEVEL 0 FOR 390.0;
-		LEVEL 1 FOR 600.0;
-=======
-		LEVEL 1 FOR 40.0;
-		LEVEL 0 FOR 180.0;
-		LEVEL 1 FOR 780.0;
->>>>>>> origin/master
+		LEVEL 1 FOR 350.0;
+		LEVEL 0 FOR 330.0;
+		LEVEL 1 FOR 320.0;
 	}
 }
 
@@ -593,17 +590,9 @@ TRANSITION_LIST("btM")
 	NODE
 	{
 		REPEAT = 1;
-<<<<<<< HEAD
-		LEVEL 1 FOR 410.0;
-		LEVEL 0 FOR 330.0;
-		LEVEL 1 FOR 260.0;
-=======
-		LEVEL 1 FOR 270.0;
-		LEVEL 0 FOR 210.0;
-		LEVEL 1 FOR 50.0;
-		LEVEL 0 FOR 190.0;
-		LEVEL 1 FOR 280.0;
->>>>>>> origin/master
+		LEVEL 1 FOR 20.0;
+		LEVEL 0 FOR 320.0;
+		LEVEL 1 FOR 660.0;
 	}
 }
 
@@ -612,15 +601,9 @@ TRANSITION_LIST("btS")
 	NODE
 	{
 		REPEAT = 1;
-<<<<<<< HEAD
-		LEVEL 1 FOR 760.0;
-		LEVEL 0 FOR 220.0;
-		LEVEL 1 FOR 20.0;
-=======
-		LEVEL 1 FOR 530.0;
-		LEVEL 0 FOR 190.0;
-		LEVEL 1 FOR 280.0;
->>>>>>> origin/master
+		LEVEL 1 FOR 700.0;
+		LEVEL 0 FOR 240.0;
+		LEVEL 1 FOR 60.0;
 	}
 }
 
@@ -631,9 +614,9 @@ TRANSITION_LIST("clk")
 		REPEAT = 1;
 		NODE
 		{
-			REPEAT = 50;
-			LEVEL 0 FOR 10.0;
-			LEVEL 1 FOR 10.0;
+			REPEAT = 100;
+			LEVEL 0 FOR 5.0;
+			LEVEL 1 FOR 5.0;
 		}
 	}
 }
@@ -1539,11 +1522,5 @@ DISPLAY_LINE
 	TREE_INDEX = 52;
 	TREE_LEVEL = 1;
 	PARENT = 45;
-}
-
-TIME_BAR
-{
-	TIME = 0;
-	MASTER = TRUE;
 }
 ;

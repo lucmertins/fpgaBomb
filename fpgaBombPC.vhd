@@ -31,10 +31,13 @@ begin
 				rstF0<='0';
 				if ativar='0' then
 					proximo_estado <= estado_1;
+				else
+					proximo_estado <= estado_0;
 				end if;
 			when estado_1  =>
 				enabledF0<='0';
 				rstF0<='0';
+				proximo_estado <= estado_1;
 		end case;  
 	end process;
 end arq;
