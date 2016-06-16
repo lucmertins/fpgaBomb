@@ -6,30 +6,36 @@ use IEEE.std_logic_unsigned.all;
  entity fpgaBomb is
 	 port (
 		 clk,btH,btM,btS,ativar: in std_logic;
+		 oHora,oMin,oSeg: out std_logic_vector(7 downto 0);
 		 dspH0,dspH1,dspM0,dspM1,dspS0,dspS1: out std_logic_vector(6 downto 0)
 		 );
  end fpgaBomb; 
  
 architecture arq of fpgaBomb is
-	signal senabledF0,srstF0: std_logic;
+	signal senabledStatus: std_logic_vector(1 downto 0);
+	signal srst: std_logic;
 	
  component fpgaBombPC is
 	 port (
 		 clk,ativar: in std_logic;
-		 enabledF0,rstF0: out std_logic   -- CTL
+		 rst: out std_logic;
+		 enabledStatus: out std_logic_vector(1 downto 0)   -- CTL
 		 );
  end component; 
 
  component fpgaBombPO is
 	 port (
 		 clk,btH,btM,btS: in std_logic;
-		 enabledF0,rstF0: in std_logic;   -- CTL
+		 rst: in std_logic;                                -- CTL
+		 enabledStatus: in std_logic_vector(1 downto 0);   -- CTL
+		 oHora,oMin,oSeg: out std_logic_vector(7 downto 0);
 		 dspH0,dspH1,dspM0,dspM1,dspS0,dspS1: out std_logic_vector(6 downto 0)
 		 );
  end component;
 begin
 
-controle: fpgaBombPC port map(clk => clk, ativar => ativar,enabledF0=>senabledF0,rstF0=>srstF0);
-operacao: fpgaBombPO port map(clk => clk, btH=>btH,btM=>btM,btS=>btS,enabledF0=>senabledF0,rstF0=>srstF0,
-										dspH0=>dspH0,dspH1=>dspH1,dspM0=>dspM0,dspM1=>dspM1,dspS0=>dspS0,dspS1=>dspS1);
+controle: fpgaBombPC port map(clk => clk, ativar => ativar, enabledStatus=>senabledStatus, rst=>srst);
+operacao: fpgaBombPO port map(clk => clk, btH=>btH, btM=>btM, btS=>btS, enabledStatus=>senabledStatus, rst=>srst,
+										dspH0=>dspH0, dspH1=>dspH1, dspM0=>dspM0, dspM1=>dspM1, dspS0=>dspS0, dspS1=>dspS1,
+										oHora=>oHora, oMin=>oMin, oSeg=>oSeg);
 end arq;
