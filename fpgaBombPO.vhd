@@ -59,12 +59,12 @@ component fullTimer is
  begin
 
    freq1s: divisorfrequencia port map(clk => clk, clock_1s => clk1s,clock_0_5s=>clk05s);
-	configTimer: fullTimer port map(clk=>clk,rst=>rst,enabled=>sEnabledF0,opc=>opctimer,
+	configTimer: fullTimer port map(clk=>clk05s,rst=>rst,enabled=>sEnabledF0,opc=>opctimer,
 					dspH0=>dH0,dspH1=>dH1,dspM0=>dM0,dspM1=>dM1,dspS0=>dS0,dspS1=>dS1,hora=>sHora,min=>sMin,seg=>sSeg);
 	saveHora:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sHora,out8=>oHora);
 	saveMin:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sMin,out8=>oMin);
 	saveSeg:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sSeg,out8=>oSeg);
-	configSenha: parcialTimer port map(clk=>clk,rst=>rst,enabled=>btSenha,hora_min_coddec=>"11",result=>sSenha,dsp0=>dsenha0,dsp1=>dsenha1);
+	configSenha: parcialTimer port map(clk=>clk05s,rst=>rst,enabled=>btSenha,hora_min_coddec=>"11",result=>sSenha,dsp0=>dsenha0,dsp1=>dsenha1);
 	saveSenha:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF1,in8=>sSenha,out8=>oSenha);
 
 	

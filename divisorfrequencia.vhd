@@ -14,9 +14,9 @@ use IEEE.std_logic_unsigned.all;
  architecture arq of divisorfrequencia is 
 
  constant TIMECONST1S   : integer := 50000000;
- constant TIMECONST0_5S : integer := 25000000;
+ constant TIMECONST0_5S : integer := 5555555;
 
- signal count0_5s: integer range 0 to 25000000 := 0;
+ signal count0_5s: integer range 0 to 5555555 := 0;
  signal count1s: integer range 0 to 50000000 := 0;
 
  signal D1s: std_logic := '0';

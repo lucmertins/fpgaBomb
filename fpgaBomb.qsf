@@ -68,5 +68,53 @@ set_global_assignment -name VECTOR_WAVEFORM_FILE divisorfrequencia.vwf
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE /home/mertins/Desenvolvimento/vhdl/fpgaBomb/fpgaBomb.vwf
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_location_assignment PIN_W26 -to btH
+set_location_assignment PIN_P23 -to btM
+set_location_assignment PIN_N23 -to btS
+set_location_assignment PIN_G26 -to ativar
+set_location_assignment PIN_N2 -to clk
+set_location_assignment PIN_L3 -to dspH1[0]
+set_location_assignment PIN_L2 -to dspH1[1]
+set_location_assignment PIN_L9 -to dspH1[2]
+set_location_assignment PIN_L6 -to dspH1[3]
+set_location_assignment PIN_L7 -to dspH1[4]
+set_location_assignment PIN_P9 -to dspH1[5]
+set_location_assignment PIN_N9 -to dspH1[6]
+set_location_assignment PIN_R2 -to dspH0[0]
+set_location_assignment PIN_P4 -to dspH0[1]
+set_location_assignment PIN_P3 -to dspH0[2]
+set_location_assignment PIN_M2 -to dspH0[3]
+set_location_assignment PIN_M3 -to dspH0[4]
+set_location_assignment PIN_M5 -to dspH0[5]
+set_location_assignment PIN_M4 -to dspH0[6]
+set_location_assignment PIN_T2 -to dspM1[0]
+set_location_assignment PIN_P6 -to dspM1[1]
+set_location_assignment PIN_P7 -to dspM1[2]
+set_location_assignment PIN_T9 -to dspM1[3]
+set_location_assignment PIN_R5 -to dspM1[4]
+set_location_assignment PIN_R4 -to dspM1[5]
+set_location_assignment PIN_R3 -to dspM1[6]
+set_location_assignment PIN_U9 -to dspM0[0]
+set_location_assignment PIN_U1 -to dspM0[1]
+set_location_assignment PIN_U2 -to dspM0[2]
+set_location_assignment PIN_T4 -to dspM0[3]
+set_location_assignment PIN_R7 -to dspM0[4]
+set_location_assignment PIN_R6 -to dspM0[5]
+set_location_assignment PIN_T3 -to dspM0[6]
+set_location_assignment PIN_Y23 -to dspS1[0]
+set_location_assignment PIN_AA25 -to dspS1[1]
+set_location_assignment PIN_AA26 -to dspS1[2]
+set_location_assignment PIN_Y26 -to dspS1[3]
+set_location_assignment PIN_Y25 -to dspS1[4]
+set_location_assignment PIN_U22 -to dspS1[5]
+set_location_assignment PIN_W24 -to dspS1[6]
+set_location_assignment PIN_AB23 -to dspS0[0]
+set_location_assignment PIN_V22 -to dspS0[1]
+set_location_assignment PIN_AC25 -to dspS0[2]
+set_location_assignment PIN_AC26 -to dspS0[3]
+set_location_assignment PIN_AB26 -to dspS0[4]
+set_location_assignment PIN_AB25 -to dspS0[5]
+set_location_assignment PIN_Y24 -to dspS0[6]
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
