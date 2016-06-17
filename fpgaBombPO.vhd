@@ -15,7 +15,7 @@ use IEEE.std_logic_unsigned.all;
  
 architecture arq of fpgaBombPO is
 
-signal clk1s: std_logic;
+signal clk05s,clk1s: std_logic;
 signal opctimer: std_logic_vector(1 downto 0);
 signal btSenha: std_logic;
 signal dH0,dH1,dM0,dM1,dS0,dS1,dSenha0,dSenha1: std_logic_vector(6 downto 0);
@@ -25,7 +25,8 @@ signal sEnabledF0,sEnabledF1: std_logic;
 
 component divisorfrequencia is
 	 port (
-		 clk: in std_logic;   -- 50Mhz    S
+		 clk: in std_logic;   -- 50Mhz     50000000 ciclos para 1  	seg
+		 clock_0_5s: out std_logic;
 		 clock_1s: out std_logic
 		 );
  end component; 
@@ -57,13 +58,13 @@ component fullTimer is
  
  begin
 
-   freq1s: divisorfrequencia port map(clk => clk, clock_1s => clk1s);
+   freq1s: divisorfrequencia port map(clk => clk, clock_1s => clk1s,clock_0_5s=>clk05s);
 	configTimer: fullTimer port map(clk=>clk,rst=>rst,enabled=>sEnabledF0,opc=>opctimer,
 					dspH0=>dH0,dspH1=>dH1,dspM0=>dM0,dspM1=>dM1,dspS0=>dS0,dspS1=>dS1,hora=>sHora,min=>sMin,seg=>sSeg);
 	saveHora:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sHora,out8=>oHora);
 	saveMin:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sMin,out8=>oMin);
 	saveSeg:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sSeg,out8=>oSeg);
-	configSenha: parcialTimer port map(clk=>clk,rst=>rst,enabled=>btSenha,hora_min_coddec=>"11",dsp0=>dsenha0,dsp1=>dsenha1);
+	configSenha: parcialTimer port map(clk=>clk,rst=>rst,enabled=>btSenha,hora_min_coddec=>"11",result=>sSenha,dsp0=>dsenha0,dsp1=>dsenha1);
 	saveSenha:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF1,in8=>sSenha,out8=>oSenha);
 
 	
@@ -101,7 +102,7 @@ component fullTimer is
 		end if;  
    end process;
  
-   process (btH,btM,btS)    -- define qual push button esta em uso em cada fase
+   process (clk,btH,btM,btS)    -- define qual push button esta em uso em cada fase
 	begin   
 		if enabledStatus = "00" then     -- status 0
 			btSenha<='0';
@@ -115,7 +116,7 @@ component fullTimer is
 				opctimer<="00";
 			end if;
 		elsif enabledStatus = "01" then   -- status 1
-				btSenha<=not btH;
+				btSenha<=not btS;
 				opctimer<="00";
 		else
 			btSenha<='0';
