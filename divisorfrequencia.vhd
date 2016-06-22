@@ -5,7 +5,7 @@ use IEEE.std_logic_unsigned.all;
 
  entity divisorfrequencia is
 	 port (
-		 clk: in std_logic;   -- 50Mhz     50000000 ciclos para 1  	seg
+		 clk: in std_logic;   -- 50Mhz     10000000 ciclos para 1  	seg
 		 clock_0_5s: out std_logic;
 		 clock_1s: out std_logic
 		 );
@@ -13,11 +13,11 @@ use IEEE.std_logic_unsigned.all;
 
  architecture arq of divisorfrequencia is 
 
- constant TIMECONST1S   : integer := 50000000;
+ constant TIMECONST1S   : integer := 10000000;
  constant TIMECONST0_5S : integer := 5555555;
 
  signal count0_5s: integer range 0 to 5555555 := 0;
- signal count1s: integer range 0 to 50000000 := 0;
+ signal count1s: integer range 0 to 10000000 := 0;
 
  signal D1s: std_logic := '0';
  signal D0_5s: std_logic := '0';

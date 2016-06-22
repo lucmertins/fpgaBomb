@@ -8,7 +8,7 @@ use IEEE.std_logic_unsigned.all;
 		 clk,btH,btM,btS: in std_logic;
 		 rst: in std_logic;                                -- CTL
 		 enabledStatus: in std_logic_vector(1 downto 0);   -- CTL
-		 oHora,oMin,oSeg,oSenha: out std_logic_vector(7 downto 0);    --- temporariamente para avaliar no grafico
+		 zerado: out std_logic;
 		 dspH0,dspH1,dspM0,dspM1,dspS0,dspS1: out std_logic_vector(6 downto 0)
 		 );
  end fpgaBombPO; 
@@ -18,10 +18,10 @@ architecture arq of fpgaBombPO is
 signal clk05s,clk1s: std_logic;
 signal opctimer: std_logic_vector(1 downto 0);
 signal btSenha: std_logic;
-signal dH0,dH1,dM0,dM1,dS0,dS1,dSenha0,dSenha1: std_logic_vector(6 downto 0);
+signal dH0,dH1,dM0,dM1,dS0,dS1,dSenha0,dSenha1,drH0,drH1,drM0,drM1,drS0,drS1: std_logic_vector(6 downto 0);
 signal sHora,sMin,sSeg,sSenha: std_logic_vector(7 downto 0);
-signal sEnabledF0,sEnabledF1: std_logic;
-
+signal sEnabledF0,sEnabledF1,sEnabledF2: std_logic;
+signal soHora,soMin,soSeg,soSenha: std_logic_vector(7 downto 0);   
 
 component divisorfrequencia is
 	 port (
@@ -56,17 +56,28 @@ component fullTimer is
 		);
  end component;
  
+ component HMSregressivo IS 
+	port (
+		clock, load : IN std_logic;
+		carga_segundos, carga_minutos, carga_horas : IN std_logic_vector(7 downto 0);
+		zerado: out std_logic;
+		saida_segundos, saida_minutos, saida_horas : OUT std_logic_vector(7 downto 0);
+		dspH0,dspH1,dspM0,dspM1,dspS0,dspS1: out std_logic_vector(6 downto 0)
+	); 
+ end component;
+
  begin
 
    freq1s: divisorfrequencia port map(clk => clk, clock_1s => clk1s,clock_0_5s=>clk05s);
 	configTimer: fullTimer port map(clk=>clk05s,rst=>rst,enabled=>sEnabledF0,opc=>opctimer,
 					dspH0=>dH0,dspH1=>dH1,dspM0=>dM0,dspM1=>dM1,dspS0=>dS0,dspS1=>dS1,hora=>sHora,min=>sMin,seg=>sSeg);
-	saveHora:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sHora,out8=>oHora);
-	saveMin:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sMin,out8=>oMin);
-	saveSeg:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sSeg,out8=>oSeg);
+	saveHora:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sHora,out8=>soHora);
+	saveMin:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sMin,out8=>soMin);
+	saveSeg:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sSeg,out8=>soSeg);
 	configSenha: parcialTimer port map(clk=>clk05s,rst=>rst,enabled=>btSenha,hora_min_coddec=>"11",result=>sSenha,dsp0=>dsenha0,dsp1=>dsenha1);
-	saveSenha:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF1,in8=>sSenha,out8=>oSenha);
-
+	saveSenha:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF1,in8=>sSenha,out8=>soSenha);
+	regressivo: HMSregressivo port map(clock=>clk1s,load=>sEnabledF2,carga_segundos=>soSeg,carga_minutos=>soMin,carga_horas=>soHora,zerado=>zerado,
+		dspH0=>drH0,dspH1=>drH1,dspM0=>drM0,dspM1=>drM1,dspS0=>drS0,dspS1=>drS1);
 	
 	process (clk)  -- indica qual estrutura utiliza o display conforme o status
 	begin
@@ -74,6 +85,7 @@ component fullTimer is
 			if enabledStatus="00" then
 				sEnabledF0<='1';
 				sEnabledF1<='0';
+				sEnabledF2<='0';
 				dspH0<=dH0;
 				dspH1<=dH1;
 				dspM0<=dM0;
@@ -83,15 +95,37 @@ component fullTimer is
 			elsif enabledStatus="01" then
 				sEnabledF0<='0';
 				sEnabledF1<='1';
+				sEnabledF2<='0';
 				dspH0<="1111111";
 				dspH1<="1111111";
 				dspM0<="1111111";
 				dspM1<="1111111";
 				dspS0<=dsenha0;
 				dspS1<=dsenha1;
+			elsif enabledStatus="10" then
+				sEnabledF0<='0';
+				sEnabledF1<='0';
+				sEnabledF2<='1';
+				dspH0<=drH0;
+				dspH1<=drH1;
+				dspM0<=drM0;
+				dspM1<=drM1;
+				dspS0<=drS0;
+				dspS1<=drS1;
+			elsif enabledStatus="11" then
+				sEnabledF0<='0';
+				sEnabledF1<='0';
+				sEnabledF2<='0';
+				dspH0<=drH0;
+				dspH1<=drH1;
+				dspM0<=drM0;
+				dspM1<=drM1;
+				dspS0<=drS0;
+				dspS1<=drS1;
 			else
 				sEnabledF0<='0';
 				sEnabledF1<='0';
+				sEnabledF2<='0';
 				dspH0<="1111111";
 				dspH1<="1111111";
 				dspM0<="1111111";
@@ -116,8 +150,14 @@ component fullTimer is
 				opctimer<="00";
 			end if;
 		elsif enabledStatus = "01" then   -- status 1
-				btSenha<=not btS;
-				opctimer<="00";
+			btSenha<=not btS;
+			opctimer<="00";
+		elsif enabledStatus = "10" then   -- status 2
+			btSenha<='0';
+			opctimer<="00";
+		elsif enabledStatus = "11" then   -- status 3
+			btSenha<='0';
+			opctimer<="00";
 		else
 			btSenha<='0';
 			opctimer<="00";

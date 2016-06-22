@@ -12,7 +12,7 @@ use IEEE.std_logic_unsigned.all;
  end fpgaBombPC; 
  
 architecture arq of fpgaBombPC is
-	type STATE_TYPE is (estado_0, estado_1,estado_2); 
+	type STATE_TYPE is (estado_0, estado_1,estado_2,estado_3); 
 	signal estado_atual, proximo_estado: STATE_TYPE;
 	signal btAtivar: std_logic := '1';
 	signal lastBtAtivar    : std_logic := '1';
@@ -50,7 +50,10 @@ begin
 				end if;
 			when estado_2  =>
 				enabledStatus<="10";
-				proximo_estado <= estado_2;
+				proximo_estado <= estado_3;
+			when estado_3  =>
+				enabledStatus<="11";
+				proximo_estado <= estado_3;
 		end case;  
 	end process;
 end arq;
