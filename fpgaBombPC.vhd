@@ -5,19 +5,37 @@ use IEEE.std_logic_unsigned.all;
 
  entity fpgaBombPC is
 	 port (
-		 clk,ativar: in std_logic;
+		 clk,ativar,zerado: in std_logic;
 		 rst: out std_logic;
-		 enabledStatus: out std_logic_vector(1 downto 0)
+		 senha: in std_logic_vector(7 downto 0);
+		 oSenha: out std_logic_vector(7 downto 0);  -- temporario para avaliacao
+		 enabledStatus: out std_logic_vector(2 downto 0)
 		 );
  end fpgaBombPC; 
  
 architecture arq of fpgaBombPC is
-	type STATE_TYPE is (estado_0, estado_1,estado_2,estado_3); 
+	type STATE_TYPE is (estado_0, estado_1,estado_2,estado_3,estado_4,estado_5); 
 	signal estado_atual, proximo_estado: STATE_TYPE;
 	signal btAtivar: std_logic := '1';
-	signal lastBtAtivar    : std_logic := '1';
+	signal lastBtAtivar:  std_logic := '1';
+	signal senabledRegSenha: std_logic:='0';
+	signal soSenha: std_logic_vector(7 downto 0);
+	signal srstRegSenha: std_logic:='0';
+	
+	component registrador8bit is
+	port(
+		in8 : in std_logic_vector (7 downto 0);
+		rst,clk, load: in std_logic;
+		out8,notout8: out std_logic_vector (7 downto 0)
+		);
+ end component;
+ 
 begin
 
+	saveSenha:registrador8bit port map(clk=>clk,rst=>srstRegSenha,load=>senabledRegSenha,in8=>senha,out8=>soSenha);
+
+	oSenha<=soSenha;
+	
 	process (clk)  
 	begin
 		if clk'EVENT and clk = '1' then    
@@ -35,25 +53,50 @@ begin
 	begin   
 		case estado_atual is      
 			when estado_0  =>
-				enabledStatus<="00";
+				enabledStatus<="000";
+				senabledRegSenha<='0';
+				srstRegSenha<='1';
 				if btAtivar='0' then
 					proximo_estado <= estado_1;
 				else
 					proximo_estado <= estado_0;
 				end if;
 			when estado_1  =>
-				enabledStatus<="01";
+				enabledStatus<="001";
+				senabledRegSenha<='1';
+				srstRegSenha<='0';
 				if btAtivar='0' then
 					proximo_estado <= estado_2;
 				else
 					proximo_estado <= estado_1;
 				end if;
 			when estado_2  =>
-				enabledStatus<="10";
+				enabledStatus<="010";
+				senabledRegSenha<='0';
+				srstRegSenha<='0';
 				proximo_estado <= estado_3;
 			when estado_3  =>
-				enabledStatus<="11";
-				proximo_estado <= estado_3;
+				enabledStatus<="011";
+				srstRegSenha<='0';
+				if zerado='1' then
+					proximo_estado <= estado_5;
+				elsif  btAtivar='0' and senha=sosenha then
+					proximo_estado<=estado_4;
+				else
+					proximo_estado <= estado_3;
+				end if;
+			when estado_4 =>
+				srstRegSenha<='0';
+				enabledStatus<="100";
+				if  btAtivar='0' then
+					proximo_estado<=estado_0;
+				else
+					proximo_estado <= estado_4;
+				end if;
+			when estado_5 =>
+				enabledStatus<="101";
+				srstRegSenha<='0';
+				proximo_estado <= estado_5;
 		end case;  
 	end process;
 end arq;
