@@ -52,6 +52,7 @@
 *.sopc_builder
 *.summary
 *.tcl
+*.ddb
 *.txt # Explicitly add any text files used
 *~
 *example*
