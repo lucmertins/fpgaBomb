@@ -7,6 +7,7 @@ use IEEE.std_logic_unsigned.all;
 	 port (
 		 clk,btH,btM,btS,ativar: in std_logic;
 		 oSenha: out std_logic_vector(7 downto 0);  -- temporario para avaliacao
+		 enabledStatus: out std_logic_vector(2 downto 0);   -- temporario para avaliacao
 		 dspH0,dspH1,dspM0,dspM1,dspS0,dspS1,dspP0,dspP1: out std_logic_vector(6 downto 0)
 		 );
  end fpgaBomb; 
@@ -38,6 +39,7 @@ architecture arq of fpgaBomb is
  end component;
 begin
 
+enabledStatus<=senabledStatus;
 
 controle: fpgaBombPC port map(clk => clk, ativar => ativar, enabledStatus=>senabledStatus, rst=>srst,senha=>ssenha,oSenha=>oSenha);
 operacao: fpgaBombPO port map(clk => clk, btH=>btH, btM=>btM, btS=>btS, enabledStatus=>senabledStatus, rst=>srst,
