@@ -14,7 +14,7 @@ END Regressivo60;
 ARCHITECTURE arqRegressivo60 OF Regressivo60 IS
 
 signal tmp, tmp_not : std_logic_vector(7 downto 0);
-signal clear, preset : std_logic_vector(7 downto 0);
+signal clear, preset, jk : std_logic_vector(7 downto 0);
 
 component flipflopjkcp
 		port(
@@ -31,15 +31,14 @@ BEGIN
 		IF load = '1' THEN
 			clear <= carga;
 			preset <= not carga;
-		ELSIF clock'EVENT and clock='0' THEN
-			IF tmp_not = "00000000" THEN
-				clear <= "00111011";
-				preset <= "11000100";
-			ELSE
-				clear <= "00000000";
-				preset <= "00000000";
-			END IF;
+		ELSIF tmp_not = "00000000" THEN
+			clear <= "00111011";
+			preset <= "11000100";
+		ELSE
+			clear <= "00000000";
+			preset <= "00000000";
 		END IF;
+		
 	END PROCESS;
 		
 	flip01: flipflopjkcp port map(clock => clock, clear => clear(0), preset => preset(0), j => '1', k => '1', q => tmp(0), q_not => tmp_not(0));

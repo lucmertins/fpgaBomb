@@ -106,7 +106,6 @@ set_location_assignment PIN_AB25 -to dspS0[5]
 set_location_assignment PIN_Y24 -to dspS0[6]
 set_global_assignment -name VHDL_FILE Regressivo24.vhd
 set_global_assignment -name VHDL_FILE HMSregressivo.vhd
-set_global_assignment -name VHDL_FILE flipflopjk.vhd
 set_global_assignment -name VHDL_FILE flipflopjkcp.vhd
 set_global_assignment -name VHDL_FILE Regressivo60.vhd
 set_global_assignment -name VHDL_FILE registrador8bit.vhd
@@ -121,5 +120,19 @@ set_global_assignment -name VECTOR_WAVEFORM_FILE fpgaBomb.vwf
 set_global_assignment -name VECTOR_WAVEFORM_FILE fpgaBombPO.vwf
 set_global_assignment -name VECTOR_WAVEFORM_FILE fullTimer.vwf
 set_global_assignment -name VECTOR_WAVEFORM_FILE divisorfrequencia.vwf
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE /home/mertins/Desenvolvimento/vhdl/fpgaBomb/fpgaBomb.vwf
+set_location_assignment PIN_V13 -to dspP0[6]
+set_location_assignment PIN_V14 -to dspP0[5]
+set_location_assignment PIN_AE11 -to dspP0[4]
+set_location_assignment PIN_AD11 -to dspP0[3]
+set_location_assignment PIN_AC12 -to dspP0[2]
+set_location_assignment PIN_AB12 -to dspP0[1]
+set_location_assignment PIN_AF10 -to dspP0[0]
+set_location_assignment PIN_AB24 -to dspP1[6]
+set_location_assignment PIN_AA23 -to dspP1[5]
+set_location_assignment PIN_AA24 -to dspP1[4]
+set_location_assignment PIN_Y22 -to dspP1[3]
+set_location_assignment PIN_W21 -to dspP1[2]
+set_location_assignment PIN_V21 -to dspP1[1]
+set_location_assignment PIN_V20 -to dspP1[0]
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

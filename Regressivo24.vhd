@@ -26,19 +26,14 @@ end component;
 
 BEGIN
 		
-	PROCESS(clock, load)
+	PROCESS(clock)
 	BEGIN
 		IF load = '1' THEN
 			clear <= carga;
 			preset <= not carga;
-		ELSIF clock'EVENT and clock='0' THEN
-			IF tmp_not = "00000000" THEN
-				clear <= "00011000";
-				preset <= "11100111";
-			ELSE
-				clear <= "00000000";
-				preset <= "00000000";
-			END IF;
+		ELSE
+			clear <= "00000000";
+			preset <= "00000000";
 		END IF;
 	END PROCESS;
 	
