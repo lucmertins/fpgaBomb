@@ -20,21 +20,35 @@ architecture arq of fpgaBombPC is
 	signal lastBtAtivar:  std_logic := '1';
 	signal senabledRegSenha: std_logic:='0';
 	signal soSenha: std_logic_vector(7 downto 0);
-	signal srstRegSenha: std_logic:='0';
-
+	signal srstRegSenha: std_logic:='0'; 
+	signal srstCST2:std_logic:='0';
+	signal senableCST2:std_logic:='0';
+	signal sCount: std_logic_vector(7 downto 0);
+	signal sCountST2: std_logic_vector(7 downto 0);
+	signal senableCount: std_logic:='0'; 
+	
 	component registrador8bit is
 	port(
 		in8 : in std_logic_vector (7 downto 0);
 		rst,clk, load: in std_logic;
 		out8,notout8: out std_logic_vector (7 downto 0)
 		);
- end component;
+   end component;
+ 
+   component parcialTimer 
+		port(
+		 clk,rst,enabled: in std_logic;
+		 hora_min_coddec: in std_logic_vector(1 downto 0); 
+		 result: out std_logic_vector(7 downto 0)
+		 );
+	end component;
  
 begin
 
 	saveSenha:registrador8bit port map(clk=>clk,rst=>srstRegSenha,load=>senabledRegSenha,in8=>senha,out8=>soSenha);
-
-	oSenha<=soSenha;
+	contadorsenha: parcialTimer port map(clk=>clk,rst=>srstRegSenha,enabled=>senableCount,hora_min_coddec=>"11",result=>sCount);
+	contadorST2: parcialTimer port map(clk=>clk,rst=>srstCST2,enabled=>senableCST2,hora_min_coddec=>"11",result=>sCountST2);
+	oSenha<=scount;
 	
 	process (clk)  
 	begin
@@ -50,14 +64,13 @@ begin
 	end process;
 	
 	process (estado_atual,btAtivar)  
-		variable count: integer range 0 to 10;
 	begin   
 		rst<='0';
 		case estado_atual is      
 			when estado_0  =>
-				count:=0;
 				enabledStatus<="000";
 				senabledRegSenha<='0';
+				senableCount<='0';
 				srstRegSenha<='1';
 				if btAtivar='0' then
 					proximo_estado <= estado_1;
@@ -67,7 +80,9 @@ begin
 			when estado_1  =>
 				enabledStatus<="001";
 				senabledRegSenha<='1';
+				senableCount<='0';
 				srstRegSenha<='0';
+				srstCST2<='1';
 				if btAtivar='0' then
 					proximo_estado <= estado_2;
 				else
@@ -76,8 +91,16 @@ begin
 			when estado_2  =>
 				enabledStatus<="010";
 				senabledRegSenha<='0';
+				senableCount<='0';
 				srstRegSenha<='0';
-				proximo_estado <= estado_3;
+				senableCST2<='1';
+				srstCST2<='0';
+				if sCountST2="00000100" then
+					proximo_estado <= estado_3;
+				else
+					proximo_estado <= estado_2;
+				end if;
+				
 			when estado_3  =>
 				enabledStatus<="011";
 				srstRegSenha<='0';
@@ -85,18 +108,19 @@ begin
 				if offtime='1' then
 					proximo_estado <= estado_5;
 				elsif  btAtivar='0' then 
-					if senha=sosenha then
+					if senha=soSenha then
 						proximo_estado<=estado_4;
 					else
---						count:=count+1;
---						if count>4 then
---							proximo_estado <= estado_5;
---						else
+						if sCount="00000011" then
 							proximo_estado <= estado_5;
---						end if;
+						else
+							proximo_estado <= estado_3;
+						end if;
+						senableCount<='1';
 					end if;
 				else
 					proximo_estado <= estado_3;
+					senableCount<='0';
 				end if;
 			when estado_4 =>
 				srstRegSenha<='0';

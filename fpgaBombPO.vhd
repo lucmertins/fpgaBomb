@@ -71,12 +71,12 @@ component fullTimer is
  begin
 
    freq1s: divisorfrequencia port map(clk => clk, clock_1s => clk1s,clock_0_5s=>clk05s);
-	configTimer: fullTimer port map(clk=>clk05s,rst=>rst,enabled=>sEnabledF0,opc=>opctimer,
+	configTimer: fullTimer port map(clk=>clk05s,rst=>rst,enabled=>sEnabledF0,opc=>opctimer,  --05
 					dspH0=>dH0,dspH1=>dH1,dspM0=>dM0,dspM1=>dM1,dspS0=>dS0,dspS1=>dS1,hora=>sHora,min=>sMin,seg=>sSeg);
 	saveHora:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sHora,out8=>soHora);
 	saveMin:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sMin,out8=>soMin);
 	saveSeg:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sSeg,out8=>soSeg);
-	configSenha: parcialTimer port map(clk=>clk05s,rst=>srst,enabled=>btSenha,hora_min_coddec=>"11",result=>oSenha,dsp0=>dP0,dsp1=>dP1);
+	configSenha: parcialTimer port map(clk=>clk05s,rst=>srst,enabled=>btSenha,hora_min_coddec=>"11",result=>oSenha,dsp0=>dP0,dsp1=>dP1);  --05s
 	regressivo: HMSregressivo port map(clock=>clk1s,load=>sEnabledF2,enable=>senabledF3,carga_segundos=>soSeg,carga_minutos=>soMin,carga_hrs=>soHora,offtime=>offtime,
 	dspH0=>drH0,dspH1=>drH1,dspM0=>drM0,dspM1=>drM1,dspS0=>drS0,dspS1=>drS1);
 	
