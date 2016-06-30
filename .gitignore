@@ -53,6 +53,7 @@
 *.summary
 *.tcl
 *.ddb
+*.xml
 *.txt # Explicitly add any text files used
 *~
 *example*

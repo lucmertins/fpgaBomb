@@ -14,7 +14,7 @@ use IEEE.std_logic_unsigned.all;
  end fpgaBombPC; 
  
 architecture arq of fpgaBombPC is
-	type STATE_TYPE is (estado_0, estado_1,estado_2,estado_3,estado_4,estado_5,estado_6); 
+	type STATE_TYPE is (estado_0, estado_1,estado_2,estado_3,estado_4,estado_5,estado_6,estado_count); 
 	signal estado_atual, proximo_estado: STATE_TYPE;
 	signal btAtivar: std_logic := '1';
 	signal lastBtAtivar:  std_logic := '1';
@@ -66,12 +66,16 @@ begin
 	process (estado_atual,btAtivar)  
 	begin   
 		rst<='0';
+		senabledRegSenha<='0';
+		senableCount<='0';
+		srstRegSenha<='0';
+		srstCST2<='0';
+		senableCST2<='0';
 		case estado_atual is      
 			when estado_0  =>
 				enabledStatus<="000";
-				senabledRegSenha<='0';
-				senableCount<='0';
 				srstRegSenha<='1';
+				srstCST2<='1';
 				if btAtivar='0' then
 					proximo_estado <= estado_1;
 				else
@@ -80,9 +84,6 @@ begin
 			when estado_1  =>
 				enabledStatus<="001";
 				senabledRegSenha<='1';
-				senableCount<='0';
-				srstRegSenha<='0';
-				srstCST2<='1';
 				if btAtivar='0' then
 					proximo_estado <= estado_2;
 				else
@@ -90,61 +91,53 @@ begin
 				end if;
 			when estado_2  =>
 				enabledStatus<="010";
-				senabledRegSenha<='0';
-				senableCount<='0';
-				srstRegSenha<='0';
 				senableCST2<='1';
-				srstCST2<='0';
-				if sCountST2="00000100" then
+				if sCountST2>"00011111" then
 					proximo_estado <= estado_3;
 				else
-					proximo_estado <= estado_2;
+					proximo_estado <= estado_count;
 				end if;
-				
 			when estado_3  =>
 				enabledStatus<="011";
-				srstRegSenha<='0';
-				senabledRegSenha<='0';
 				if offtime='1' then
 					proximo_estado <= estado_5;
 				elsif  btAtivar='0' then 
 					if senha=soSenha then
 						proximo_estado<=estado_4;
 					else
-						if sCount="00000011" then
+						if sCount="00000010" then
 							proximo_estado <= estado_5;
 						else
-							proximo_estado <= estado_3;
+							proximo_estado <= estado_6;
 						end if;
 						senableCount<='1';
 					end if;
 				else
 					proximo_estado <= estado_3;
-					senableCount<='0';
 				end if;
 			when estado_4 =>
-				srstRegSenha<='0';
 				enabledStatus<="100";
-				senabledRegSenha<='0';
 				if  btAtivar='0' then
+					rst<='1';
 					proximo_estado<=estado_0;
 				else
 					proximo_estado <= estado_4;
 				end if;
 			when estado_5 =>
 				enabledStatus<="101";
-				srstRegSenha<='0';
-				senabledRegSenha<='0';
 				if  btAtivar='0' then    -- reset fake
+					rst<='1';
 					proximo_estado<=estado_0;
 				else
 					proximo_estado <= estado_5;
 				end if;
 			when estado_6 =>
 				enabledStatus<="110";
-				srstRegSenha<='0';
-				senabledRegSenha<='0';
 				proximo_estado <= estado_3;
+			when estado_count =>
+				enabledStatus<="010";
+				senableCST2<='1';
+				proximo_estado <= estado_2;
 		end case;  
 	end process;
 end arq;
