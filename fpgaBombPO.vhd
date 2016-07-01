@@ -67,6 +67,16 @@ component fullTimer is
 		dspH0,dspH1,dspM0,dspM1,dspS0,dspS1: out std_logic_vector(6 downto 0)
 	); 
  end component;
+ 
+ component regressivoHMS IS 
+	PORT (
+		clk,rst,ld,enbl: in std_logic;
+		zerado: out std_logic;
+		iHora,iMin,iSeg: in std_logic_vector(7 downto 0);
+		oHora,oMin,oSeg: out std_logic_vector(7 downto 0);
+		dspH0,dspH1,dspM0,dspM1,dspS0,dspS1: out std_logic_vector(6 downto 0)
+	); 
+END component;
 
  begin
 
@@ -77,8 +87,8 @@ component fullTimer is
 	saveMin:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sMin,out8=>soMin);
 	saveSeg:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sSeg,out8=>soSeg);
 	configSenha: parcialTimer port map(clk=>clk05s,rst=>srst,enabled=>btSenha,hora_min_coddec=>"11",result=>oSenha,dsp0=>dP0,dsp1=>dP1);  --05s
-	regressivo: HMSregressivo port map(clock=>clk1s,load=>sEnabledF2,enable=>senabledF3,carga_segundos=>soSeg,carga_minutos=>soMin,carga_hrs=>soHora,offtime=>offtime,
-	dspH0=>drH0,dspH1=>drH1,dspM0=>drM0,dspM1=>drM1,dspS0=>drS0,dspS1=>drS1);
+	--regressivo: HMSregressivo port map(clock=>clk1s,load=>sEnabledF2,enable=>senabledF3,carga_segundos=>soSeg,carga_minutos=>soMin,carga_hrs=>soHora,offtime=>offtime,
+	regressivo:regressivoHMS port map  (clk=>clk1s,rst=>'0',ld=>sEnabledF2,enbl=>senabledF3,iSeg=>soSeg,iMin=>soMin,iHora=>soHora,zerado=>offtime,dspH0=>drH0,dspH1=>drH1,dspM0=>drM0,dspM1=>drM1,dspS0=>drS0,dspS1=>drS1);
 	
 	process (clk)  -- indica qual estrutura utiliza o display conforme o status
 	begin

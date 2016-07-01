@@ -16,14 +16,13 @@ ARCHITECTURE arqflipflopjkcp OF flipflopjkcp IS
 	signal tmp: std_logic;
 	
 BEGIN
-	PROCESS(clock)
+	PROCESS(clock,clear,preset)
 	BEGIN 
-		IF clock'EVENT and clock='1' THEN
-			IF clear = '1' and preset = '0' THEN
+		IF clear = '1' THEN
 				tmp <= '0';
-			ELSIF clear = '0' and preset = '1' THEN
+		ELSIF  preset = '1' THEN
 				tmp <= '1';
-			ELSIF clear = '0' and preset = '0' THEN
+		ELSIF clock'EVENT and clock='1' THEN
 				IF (j = '0' and k = '0') THEN
 					tmp <= tmp;
 				ELSIF (j = '0' and k = '1') THEN
@@ -33,7 +32,6 @@ BEGIN
 				ELSIF (j = '1' and k = '1') THEN
 					tmp <= not tmp;
 				END IF;
-			END IF;
 		END IF;
 		q <= tmp;
 		q_not <= not tmp;
