@@ -6,9 +6,11 @@ use IEEE.std_logic_unsigned.all;
  entity fpgaBombPC is
 	 port (
 		 clk,ativar,offtime: in std_logic;
+		 fios: in std_logic_vector(4 downto 0);
 		 rst: out std_logic;
 		 senha: in std_logic_vector(7 downto 0);
 		 oSenha: out std_logic_vector(7 downto 0);  -- temporario para avaliacao
+		 oalertaConexao: out std_logic_vector(4 downto 0);
 		 enabledStatus: out std_logic_vector(2 downto 0)
 		 );
  end fpgaBombPC; 
@@ -63,7 +65,7 @@ begin
 		end if;  
 	end process;
 	
-	process (estado_atual,btAtivar)  
+	process (estado_atual,btAtivar,fios)  
 	begin   
 		rst<='0';
 		senabledRegSenha<='0';
@@ -71,8 +73,10 @@ begin
 		srstRegSenha<='0';
 		srstCST2<='0';
 		senableCST2<='0';
+--		oalertaConexao<="00000";
 		case estado_atual is      
 			when estado_0  =>
+				oalertaConexao<="00000";
 				enabledStatus<="000";
 				srstRegSenha<='1';
 				srstCST2<='1';
@@ -85,11 +89,17 @@ begin
 				enabledStatus<="001";
 				senabledRegSenha<='1';
 				if btAtivar='0' then
-					proximo_estado <= estado_2;
+					if fios="11111" then
+						proximo_estado <= estado_2;
+					else
+						oalertaConexao<="11111";
+						proximo_estado <= estado_1;
+					end if;
 				else
 					proximo_estado <= estado_1;
 				end if;
 			when estado_2  =>
+				oalertaConexao<="00000";
 				enabledStatus<="010";
 				senableCST2<='1';
 				if sCountST2>"00011111" then
@@ -101,6 +111,10 @@ begin
 				enabledStatus<="011";
 				if offtime='1' then
 					proximo_estado <= estado_5;
+				elsif fios(3)='0' then
+					proximo_estado<=estado_4;
+				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' or fios(0)='0' then
+					proximo_estado<=estado_5;
 				elsif  btAtivar='0' then 
 					if senha=soSenha then
 						proximo_estado<=estado_4;
