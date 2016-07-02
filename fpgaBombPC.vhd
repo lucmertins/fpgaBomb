@@ -9,7 +9,6 @@ use IEEE.std_logic_unsigned.all;
 		 fios: in std_logic_vector(4 downto 0);
 		 rst: out std_logic;
 		 senha: in std_logic_vector(7 downto 0);
-		 oSenha: out std_logic_vector(7 downto 0);  -- temporario para avaliacao
 		 oalertaConexao: out std_logic_vector(4 downto 0);
 		 enabledStatus: out std_logic_vector(2 downto 0)
 		 );
@@ -50,7 +49,6 @@ begin
 	saveSenha:registrador8bit port map(clk=>clk,rst=>srstRegSenha,load=>senabledRegSenha,in8=>senha,out8=>soSenha);
 	contadorsenha: parcialTimer port map(clk=>clk,rst=>srstRegSenha,enabled=>senableCount,hora_min_coddec=>"11",result=>sCount);
 	contadorST2: parcialTimer port map(clk=>clk,rst=>srstCST2,enabled=>senableCST2,hora_min_coddec=>"11",result=>sCountST2);
-	oSenha<=scount;
 	
 	process (clk)  
 	begin
