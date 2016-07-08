@@ -100,11 +100,11 @@ begin
 				oalertaConexao<="00000";
 				enabledStatus<="010";
 				senableCST2<='1';
---				if sCountST2>"00011111" then
+				if sCountST2>"00111111" then
 					proximo_estado <= estado_3;
---				else
---					proximo_estado <= estado_count;
---				end if;
+				else
+					proximo_estado <= estado_count;
+				end if;
 			when estado_3  =>
 				enabledStatus<="011";
 				if offtime='1' then
