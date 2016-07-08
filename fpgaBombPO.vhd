@@ -76,6 +76,7 @@ END component;
 	saveHora:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sHora,out8=>soHora);
 	saveMin:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sMin,out8=>soMin);
 	saveSeg:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sSeg,out8=>soSeg);
+<<<<<<< HEAD
 	configSenha: parcialTimer port map(clk=>sclockconfig,rst=>srst,enabled=>btSenha,hora_min_coddec=>"11",result=>oSenha,dsp0=>dP0,dsp1=>dP1);  --05s
 	regressivo:regressivoHMS port map  (clk=>sclkregressivo,rst=>'0',ld=>sEnabledF2,enbl=>senabledF3,iSeg=>soSeg,iMin=>soMin,iHora=>soHora,offtime=>offtime,dspH0=>drH0,dspH1=>drH1,dspM0=>drM0,dspM1=>drM1,dspS0=>drS0,dspS1=>drS1);
 	
@@ -89,6 +90,10 @@ END component;
 				sclkregressivo<=sclk1;
 		end if;  
    end process;
+=======
+	configSenha: parcialTimer port map(clk=>clk05s,rst=>srst,enabled=>btSenha,hora_min_coddec=>"11",result=>oSenha,dsp0=>dP0,dsp1=>dP1);  --05s
+	regressivo:regressivoHMS port map  (clk=>clk1s,rst=>'0',ld=>sEnabledF2,enbl=>senabledF3,iSeg=>soSeg,iMin=>soMin,iHora=>soHora,offtime=>offtime,dspH0=>drH0,dspH1=>drH1,dspM0=>drM0,dspM1=>drM1,dspS0=>drS0,dspS1=>drS1);
+>>>>>>> master
 	
 	process (clk)  -- indica qual estrutura utiliza o display conforme o status
 	begin
