@@ -6,7 +6,7 @@ USE IEEE.std_logic_unsigned.all;
 ENTITY regressivoHMS IS 
 	PORT (
 		clk,rst,ld,enbl: in std_logic;
-		zerado: out std_logic;
+		offtime: out std_logic;
 		iHora,iMin,iSeg: in std_logic_vector(7 downto 0);
 		oHora,oMin,oSeg: out std_logic_vector(7 downto 0);
 		dspH0,dspH1,dspM0,dspM1,dspS0,dspS1: out std_logic_vector(6 downto 0)
@@ -49,19 +49,17 @@ end component;
  min: regressivo8bits port map(clk=>sclkmin,rst=>rst,ld=>ld,enbl=>enbl,input=>iMin,result=>sMin);
  seg: regressivo8bits port map(clk=>clk,rst=>rst,ld=>ld,enbl=>enbl,input=>iSeg,result=>sSeg);
  
--- ffatrazoMin: flipflopjkcp port map(clock=>clk,j=>sjs,k=>sks,clear=>rst,preset=>'0');
- 
  oHora<=sHora;
  oMin<=sMin;
  oSeg<=sSeg;
  
  process(clk)
  begin
-	zerado<='0';
+	offtime<='0';
 	sclkmin<='0';
 	sclkhora<='0';
 	if sSeg="00000000" and sMin="00000000" and sHora="00000000" then
-		zerado<='1';
+		offtime<='1';
 	else
 		if sSeg="00000000" then
 			sclkmin<='1';

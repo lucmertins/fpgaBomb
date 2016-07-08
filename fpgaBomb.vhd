@@ -23,7 +23,6 @@ architecture arq of fpgaBomb is
 		 fios: in std_logic_vector(4 downto 0);
 		 rst: out std_logic;
 		 senha: in std_logic_vector(7 downto 0);
-		 oSenha: out std_logic_vector(7 downto 0);  -- temporario para avaliacao
 		 oalertaConexao: out std_logic_vector(4 downto 0);
    	 enabledStatus: out std_logic_vector(2 downto 0)   -- CTL
 		 );

@@ -9,14 +9,13 @@ use IEEE.std_logic_unsigned.all;
 		 fios: in std_logic_vector(4 downto 0);
 		 rst: out std_logic;
 		 senha: in std_logic_vector(7 downto 0);
-		 oSenha: out std_logic_vector(7 downto 0);  -- temporario para avaliacao
 		 oalertaConexao: out std_logic_vector(4 downto 0);
 		 enabledStatus: out std_logic_vector(2 downto 0)
 		 );
  end fpgaBombPC; 
  
 architecture arq of fpgaBombPC is
-	type STATE_TYPE is (estado_0, estado_1,estado_2,estado_3,estado_4,estado_5,estado_6,estado_count); 
+	type STATE_TYPE is (estado_0, estado_1,estado_2,estado_3,estado_4,estado_5,estado_6,estado_7,estado_count); 
 	signal estado_atual, proximo_estado: STATE_TYPE;
 	signal btAtivar: std_logic := '1';
 	signal lastBtAtivar:  std_logic := '1';
@@ -50,7 +49,6 @@ begin
 	saveSenha:registrador8bit port map(clk=>clk,rst=>srstRegSenha,load=>senabledRegSenha,in8=>senha,out8=>soSenha);
 	contadorsenha: parcialTimer port map(clk=>clk,rst=>srstRegSenha,enabled=>senableCount,hora_min_coddec=>"11",result=>sCount);
 	contadorST2: parcialTimer port map(clk=>clk,rst=>srstCST2,enabled=>senableCST2,hora_min_coddec=>"11",result=>sCountST2);
-	oSenha<=scount;
 	
 	process (clk)  
 	begin
@@ -147,11 +145,33 @@ begin
 				end if;
 			when estado_6 =>
 				enabledStatus<="110";
-				proximo_estado <= estado_3;
+				proximo_estado <= estado_7;
 			when estado_count =>
 				enabledStatus<="010";
 				senableCST2<='1';
 				proximo_estado <= estado_2;
+			when estado_7  =>
+				enabledStatus<="111";
+				if offtime='1' then
+					proximo_estado <= estado_5;
+				elsif fios(3)='0' then
+					proximo_estado<=estado_4;
+				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' or fios(0)='0' then
+					proximo_estado<=estado_5;
+				elsif btAtivar='0'  then 
+					if senha=soSenha then
+						proximo_estado<=estado_4;
+					else
+						if sCount="00000010" then
+							proximo_estado <= estado_5;
+						else
+							proximo_estado <= estado_6;
+						end if;
+						senableCount<='1';
+					end if;
+				else
+					proximo_estado <= estado_7;
+				end if;
 		end case;  
 	end process;
 end arq;
