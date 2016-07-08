@@ -100,18 +100,20 @@ begin
 				oalertaConexao<="00000";
 				enabledStatus<="010";
 				senableCST2<='1';
-				if sCountST2>"00011111" then
+--				if sCountST2>"00011111" then
 					proximo_estado <= estado_3;
-				else
-					proximo_estado <= estado_count;
-				end if;
+--				else
+--					proximo_estado <= estado_count;
+--				end if;
 			when estado_3  =>
 				enabledStatus<="011";
 				if offtime='1' then
 					proximo_estado <= estado_5;
 				elsif fios(3)='0' then
 					proximo_estado<=estado_4;
-				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' or fios(0)='0' then
+				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' then
+					proximo_estado<=estado_5;
+				elsif fios(0)='0' then
 					proximo_estado<=estado_5;
 				elsif  btAtivar='0' then 
 					if senha=soSenha then
@@ -150,6 +152,29 @@ begin
 				enabledStatus<="010";
 				senableCST2<='1';
 				proximo_estado <= estado_2;
+--			when estado_7  =>
+--				enabledStatus<="111";
+--				if offtime='1' then
+--					proximo_estado <= estado_5;
+--				elsif fios(3)='0' then
+--					proximo_estado<=estado_4;
+--				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' then
+--					proximo_estado<=estado_5;
+--				elsif  btAtivar='0' then 
+--					if senha=soSenha then
+--						proximo_estado<=estado_4;
+--					else
+--						if sCount="00000110" then
+--							proximo_estado <= estado_5;
+--						else
+--							proximo_estado <= estado_6;
+--						end if;
+--						senableCount<='1';
+--					end if;
+--				else
+--					proximo_estado <= estado_7;
+--				end if;
+
 		end case;  
 	end process;
 end arq;

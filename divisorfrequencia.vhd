@@ -7,20 +7,25 @@ use IEEE.std_logic_unsigned.all;
 	 port (
 		 clk: in std_logic;   -- 50Mhz     10000000 ciclos para 1  	seg
 		 clock_0_5s: out std_logic;
-		 clock_1s: out std_logic
+		 clock_1s: out std_logic;
+		 clock_config: out std_logic
 		 );
  end divisorfrequencia; 
 
  architecture arq of divisorfrequencia is 
 
- constant TIMECONST1S   : integer := 15000000;
+ constant TIMECONFIG    : integer := 5555555;
+ constant TIMECONST1S   : integer := 15000000;   -- 15000000
  constant TIMECONST0_5S : integer := 5555555;
+ 
+ signal sclock_config: integer range 0 to 5555555 := 0;
+ signal count0_5s: integer range 0 to 12500000 := 0;
+ signal count1s: integer range 0 to 25000000 := 0;
 
- signal count0_5s: integer range 0 to 5555555 := 0;
- signal count1s: integer range 0 to 10000000 := 0;
-
+ signal D0_Config: std_logic := '0';
  signal D1s: std_logic := '0';
  signal D0_5s: std_logic := '0';
+ 
 
  begin 
 	 process (CLK)
@@ -34,11 +39,17 @@ use IEEE.std_logic_unsigned.all;
 			count0_5s <= 0;
 		 	D0_5s <= not D0_5s;
 		 end if;
+		 if (sclock_config = TIMECONFIG) then
+			sclock_config <= 0;
+		 	D0_Config <= not D0_Config;
+		 end if;
 		 count0_5s <= count0_5s + 1;
 		 count1s <= count1s + 1;
+		 sclock_config<=sclock_config+1;
 	 end if;
 	 clock_0_5s<=D0_5s;
 	 clock_1s <= D1s;
+	 clock_config<=D0_Config;
  end process;
 
  end arq;
