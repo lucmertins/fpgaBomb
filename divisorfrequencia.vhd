@@ -15,12 +15,13 @@ use IEEE.std_logic_unsigned.all;
  architecture arq of divisorfrequencia is 
 
  constant TIMECONFIG    : integer := 5555555;
+ constant TIMECONST0_5S : integer :=   25000000;          -- 12500000;
  constant TIMECONST1S   : integer := 25000000;   -- 15000000
- constant TIMECONST0_5S : integer := 12500000;
+ 
  
   
  signal sclock_config: integer range 0 to 5555555 := 0;
- signal count0_5s: integer range 0 to 12500000 := 0;
+ signal count0_5s: integer range 0 to 25000000 :=0;   --12500000 := 0;
  signal count1s: integer range 0 to 25000000 := 0;
 
  

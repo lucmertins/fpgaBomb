@@ -111,7 +111,9 @@ begin
 					proximo_estado <= estado_5;
 				elsif fios(3)='0' then
 					proximo_estado<=estado_4;
-				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' or fios(0)='0' then
+				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' then
+					proximo_estado<=estado_5;
+				elsif	fios(0)='0' then
 					proximo_estado<=estado_5;
 				elsif  btAtivar='0' then 
 					if senha=soSenha then
@@ -145,7 +147,7 @@ begin
 				end if;
 			when estado_6 =>
 				enabledStatus<="110";
-				proximo_estado <= estado_7;
+				proximo_estado <= estado_3;
 			when estado_count =>
 				enabledStatus<="010";
 				senableCST2<='1';
@@ -156,7 +158,7 @@ begin
 					proximo_estado <= estado_5;
 				elsif fios(3)='0' then
 					proximo_estado<=estado_4;
-				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' or fios(0)='0' then
+				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' then
 					proximo_estado<=estado_5;
 				elsif btAtivar='0'  then 
 					if senha=soSenha then
