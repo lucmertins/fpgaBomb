@@ -71,7 +71,6 @@ begin
 		srstRegSenha<='0';
 		srstCST2<='0';
 		senableCST2<='0';
---		oalertaConexao<="00000";
 		case estado_atual is      
 			when estado_0  =>
 				oalertaConexao<="00000";
@@ -114,7 +113,7 @@ begin
 				elsif fios(4)='0' or fios(2)='0' or fios(1)='0' then
 					proximo_estado<=estado_5;
 				elsif	fios(0)='0' then
-					proximo_estado<=estado_5;
+					proximo_estado<=estado_7;
 				elsif  btAtivar='0' then 
 					if senha=soSenha then
 						proximo_estado<=estado_4;

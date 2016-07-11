@@ -19,16 +19,10 @@ component regressivo8bits IS
 	PORT (
 		clk,rst,ld,enbl : in std_logic;
 		input: in std_logic_vector(7 downto 0);
+		zero: out std_logic;
 		result: out std_logic_vector(7 downto 0)
 	); 
 END component;
-component flipflopjkcp IS 
-	PORT (
-		clock, j, k : IN std_logic;
-		clear, preset : IN std_logic;
-		q, q_not : OUT std_logic
-	); 
-	end component;
  
 component seg7 
 		port(
@@ -37,40 +31,28 @@ component seg7
 		 );
 end component;
 
- signal sclkmin,sclkhora: std_logic;
  signal sHora,sMin,sSeg: std_logic_vector(7 downto 0);
+ signal szeroseg,szeromin,szerohora: std_logic;
  signal sdec0,sdec1,mdec0,mdec1,hdec0,hdec1: std_logic_vector(3 downto 0);
-
-
+ signal enblseg,enblmin,enblhora: std_logic;
  
  begin
  
- hora: regressivo8bits port map(clk=>sclkhora,rst=>rst,ld=>ld,enbl=>enbl,input=>iHora,result=>sHora);
- min: regressivo8bits port map(clk=>sclkmin,rst=>rst,ld=>ld,enbl=>enbl,input=>iMin,result=>sMin);
- seg: regressivo8bits port map(clk=>clk,rst=>rst,ld=>ld,enbl=>enbl,input=>iSeg,result=>sSeg);
+	hora: regressivo8bits port map(clk=>clk,rst=>rst,ld=>ld,enbl=>enblhora,input=>iHora,result=>sHora,zero=>szerohora);
+	min: regressivo8bits port map(clk=>clk,rst=>rst,ld=>ld,enbl=>enblmin,input=>iMin,result=>sMin,zero=>szeromin);
+	seg: regressivo8bits port map(clk=>clk,rst=>rst,ld=>ld,enbl=>enblseg,input=>iSeg,result=>sSeg,zero=>szeroseg);
  
- oHora<=sHora;
- oMin<=sMin;
- oSeg<=sSeg;
+	oHora<=sHora;
+	oMin<=sMin;
+	oSeg<=sSeg;
+	
+	offtime<=szeroseg and szeromin and szerohora and clk;
+   
+	enblseg<=enbl and not ld;       -- dependendo do clock tava habilitando o seg com ruido mudando o valor final para 55 para baixo
+	enblmin<=szeroseg and enbl;
+	enblhora<=szeroseg and szeromin and enbl;
  
- process(clk)
- begin
-	offtime<='0';
-	sclkmin<='0';
-	sclkhora<='0';
-	if sSeg="00000000" and sMin="00000000" and sHora="00000000" then
-		offtime<='1';
-	else
-		if sSeg="00000000" then
-			sclkmin<='1';
-		end if;
-		if sMin="00000000" then
-			sclkhora<='1';
-		end if;
-	end if; 
- end process;
- 
- 		
+ 	
 	displayS0: seg7 port map(entrada=>sdec0,s=>dspS0);
 	displayS1: seg7 port map(entrada=>sdec1,s=>dspS1);
 	displayM0: seg7 port map(entrada=>mdec0,s=>dspM0);
@@ -84,6 +66,5 @@ end component;
 	mdec0<=conv_std_logic_vector(conv_integer(sMin) mod 10,4);
 	hdec1<=conv_std_logic_vector(conv_integer(sHora)/10,4);
 	hdec0<=conv_std_logic_vector(conv_integer(sHora) mod 10,4);
-
  
  end arq;

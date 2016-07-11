@@ -23,6 +23,7 @@ signal dH0,dH1,dM0,dM1,dS0,dS1,dP0,dP1,drH0,drH1,drM0,drM1,drS0,drS1: std_logic_
 signal sHora,sMin,sSeg: std_logic_vector(7 downto 0);
 signal sEnabledF0,sEnabledF1,sEnabledF2,sEnabledF3: std_logic;
 signal soHora,soMin,soSeg,soSenha: std_logic_vector(7 downto 0);   
+signal rstRegressivo: std_logic;
 
 component divisorfrequencia is
 	 port (
@@ -76,9 +77,8 @@ END component;
 	saveHora:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sHora,out8=>soHora);
 	saveMin:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sMin,out8=>soMin);
 	saveSeg:registrador8bit port map(clk=>clk,rst=>rst,load=>sEnabledF0,in8=>sSeg,out8=>soSeg);
-<<<<<<< HEAD
 	configSenha: parcialTimer port map(clk=>sclockconfig,rst=>srst,enabled=>btSenha,hora_min_coddec=>"11",result=>oSenha,dsp0=>dP0,dsp1=>dP1);  --05s
-	regressivo:regressivoHMS port map  (clk=>sclkregressivo,rst=>'0',ld=>sEnabledF2,enbl=>senabledF3,iSeg=>soSeg,iMin=>soMin,iHora=>soHora,offtime=>offtime,dspH0=>drH0,dspH1=>drH1,dspM0=>drM0,dspM1=>drM1,dspS0=>drS0,dspS1=>drS1);
+	regressivo:regressivoHMS port map  (clk=>sclkregressivo,rst=>rst,ld=>sEnabledF2,enbl=>senabledF3,iSeg=>soSeg,iMin=>soMin,iHora=>soHora,offtime=>offtime,dspH0=>drH0,dspH1=>drH1,dspM0=>drM0,dspM1=>drM1,dspS0=>drS0,dspS1=>drS1);
 	
 	process (enabledStatus)  -- indica qual estrutura utiliza o display conforme o status
 	begin
@@ -90,10 +90,6 @@ END component;
 				sclkregressivo<=sclk1;
 		end if;  
    end process;
-=======
-	configSenha: parcialTimer port map(clk=>clk05s,rst=>srst,enabled=>btSenha,hora_min_coddec=>"11",result=>oSenha,dsp0=>dP0,dsp1=>dP1);  --05s
-	regressivo:regressivoHMS port map  (clk=>clk1s,rst=>'0',ld=>sEnabledF2,enbl=>senabledF3,iSeg=>soSeg,iMin=>soMin,iHora=>soHora,offtime=>offtime,dspH0=>drH0,dspH1=>drH1,dspM0=>drM0,dspM1=>drM1,dspS0=>drS0,dspS1=>drS1);
->>>>>>> master
 	
 	process (clk)  -- indica qual estrutura utiliza o display conforme o status
 	begin
@@ -103,6 +99,7 @@ END component;
 				sEnabledF1<='0';
 				sEnabledF2<='0';
 				sEnabledF3<='0';
+				rstRegressivo<=rst;
 				srst<=rst;
 				dspH0<=dH0;
 				dspH1<=dH1;
@@ -117,6 +114,7 @@ END component;
 				sEnabledF1<='1';
 				sEnabledF2<='0';
 				sEnabledF3<='0';
+				rstRegressivo<=rst;
 				srst<=rst;
 				dspH0<="1111111";
 				dspH1<="1111111";
@@ -131,6 +129,7 @@ END component;
 				sEnabledF1<='0';
 				sEnabledF2<='1';
 				sEnabledF3<='0';
+				rstRegressivo<='1';
 				srst<='1';
 				dspH0<=drH0;
 				dspH1<=drH1;
@@ -145,6 +144,7 @@ END component;
 				sEnabledF1<='0';
 				sEnabledF2<='0';
 				sEnabledF3<='1';
+				rstRegressivo<='0';
 				srst<=rst;
 				dspH0<=drH0;
 				dspH1<=drH1;
@@ -159,40 +159,44 @@ END component;
 				sEnabledF1<='0';
 				sEnabledF2<='0';
 				sEnabledF3<='0';
+				rstRegressivo<='0';
 				srst<=rst;
-				dspH0<="1111111";
-				dspH1<="1111111";
-				dspM0<="1111111";
-				dspM1<="1111111";
-				dspS0<="1111111";
-				dspS1<="1111111";
-				dspP0<="1010101";
-				dspP1<="1010101";
+				dspH1<="0100001";
+				dspH0<="0000110";
+				dspM1<="0001110";
+				dspM0<="1100011";
+				dspS1<="0010010";
+				dspS0<="0000110";
+				dspP1<="1111111";
+				dspP0<="1111111";
 			elsif enabledStatus="101" then
 				sEnabledF0<='0';
 				sEnabledF1<='0';
 				sEnabledF2<='0';
 				sEnabledF3<='0';
+				rstRegressivo<='0';
 				srst<=rst;
-				dspH0<="0100011";
 				dspH1<="0000011";
-				dspM0<="0100011";
+				dspH0<="0100011";
 				dspM1<="0100011";
-				dspS0<="0101011";
+				dspM0<="0100011";
 				dspS1<="0101011";
-				dspP0<="0101011";
+				dspS0<="0101011";
 				dspP1<="0101011";
+				dspP0<="0101011";
 			elsif enabledStatus="110" then
 				sEnabledF0<='0';
 				sEnabledF1<='0';
 				sEnabledF2<='0';
 				sEnabledF3<='1';
+				rstRegressivo<='0';
 				srst<='1';
 			elsif enabledStatus="111" then
 				sEnabledF0<='0';
 				sEnabledF1<='0';
 				sEnabledF2<='0';
 				sEnabledF3<='1';
+				rstRegressivo<='0';
 				srst<=rst;
 				dspH0<=drH0;
 				dspH1<=drH1;
@@ -207,6 +211,7 @@ END component;
 				sEnabledF1<='0';
 				sEnabledF2<='0';
 				sEnabledF3<='0';
+				rstRegressivo<='0';
 				srst<=rst;
 				dspH0<="1111111";
 				dspH1<="1111111";
